@@ -1,0 +1,2 @@
+wrapt===1.12.1
+git+ssh://git@github.com/adamvinueza/libevent@0.5.0
