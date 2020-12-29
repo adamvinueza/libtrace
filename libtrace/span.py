@@ -1,5 +1,8 @@
 from libevent.event import Event
 from typing import Dict
+"""
+ADAPTED FROM Span CLASS AT https://github.com/honeycombio/beeline-python/trace.py
+"""
 
 
 class Span(object):
@@ -21,7 +24,7 @@ class Span(object):
         self.event.add_field(key, value)
 
     def fields(self):
-        return self.event.fields
+        return self.event.fields()
 
     def remove_context_field(self, key):
         del(self.event[key])

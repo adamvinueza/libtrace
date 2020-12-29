@@ -4,7 +4,7 @@ from libtrace import Span
 
 
 class TestSpan(unittest.TestCase):
-    '''
+    """
     Spans have these properties:
     
         span.id
@@ -18,10 +18,10 @@ class TestSpan(unittest.TestCase):
         span.remove_context_field(key: str)
         span.fields() -> Dict
 
-    '''
+    """
     def test_span_context(self):
         ev = Event()
-        span = Span('', '', '', ev)
+        span = Span("", "", "", ev)
         span.add_context_field("some", "value")
         span.add_context({"another": "value"})
         self.assertDictEqual({
@@ -32,3 +32,6 @@ class TestSpan(unittest.TestCase):
         self.assertDictEqual({
             "some": "value",
         }, ev.fields())
+        self.assertDictEqual({
+            "some": "value",
+        }, span.fields())
