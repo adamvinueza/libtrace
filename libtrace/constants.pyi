@@ -1,0 +1,4 @@
+START_TIME_KEY: str
+ERROR_KEY: str
+SPAN_ID_BYTES: int
+TRACE_ID_BYTES: int
