@@ -1,5 +1,5 @@
 from typing import Dict, Optional
-from libtrace import generate_trace_id, generate_span_id
+from libtrace.generate import generate_trace_id, generate_span_id
 from libtrace.span import Span
 from libtrace.trace import Trace
 from libevent import Client
