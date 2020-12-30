@@ -6,7 +6,7 @@ from libtrace import Span
 class TestSpan(unittest.TestCase):
     """
     Spans have these properties:
-    
+
         span.id
         span.parent_id
         span.trace_id

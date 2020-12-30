@@ -1,11 +1,11 @@
-import random
 from typing import Dict, Optional
 from libtrace import generate_trace_id, generate_span_id
 from libtrace.span import Span
 from libtrace.trace import Trace
 from libevent import Client
 """
-ADAPTED FROM Tracer CLASS AT https://github.com/honeycombio/beeline-python/trace.py
+ADAPTED FROM Tracer CLASS AT
+    https://github.com/honeycombio/beeline-python/trace.py
 """
 
 
@@ -47,4 +47,3 @@ class Tracer(object):
                     ev=evt)
         self._trace.stack.append(span)
         return span
-
