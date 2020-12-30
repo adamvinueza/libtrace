@@ -1,11 +1,11 @@
-import random
 from typing import Dict, Optional
 from libtrace import generate_trace_id, generate_span_id
 from libtrace.span import Span
 from libtrace.trace import Trace
 from libevent import Client
 """
-ADAPTED FROM Tracer CLASS AT https://github.com/honeycombio/beeline-python/trace.py
+ADAPTED FROM Tracer CLASS AT
+    https://github.com/honeycombio/beeline-python/trace.py
 """
 
 
@@ -19,11 +19,8 @@ class Tracer(object):
 
     def start_trace(self,
                     context: Optional[str] = None,
-                    trace_id: Optional[str] = None,
                     parent_span_id: Optional[str] = None) -> Span:
         if not self._trace:
-            self._trace = Trace(trace_id=trace_id)
-        else:
             self._trace = Trace(trace_id=generate_trace_id())
         return self.start_span(context=context, parent_id=parent_span_id)
 
@@ -45,9 +42,8 @@ class Tracer(object):
             'trace.span_id': span_id,
         })
         span = Span(trace_id=self._trace.id,
-                    parent_id=parent_id,
+                    parent_id=parent_span_id,
                     id=span_id,
                     ev=evt)
         self._trace.stack.append(span)
         return span
-

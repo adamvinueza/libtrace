@@ -1,7 +1,8 @@
 from typing import Dict, List
 from libtrace.span import Span
 """
-ADAPTED FROM Trace CLASS AT https://github.com/honeycombio/beeline-python/trace.py
+ADAPTED FROM Trace CLASS AT
+    https://github.com/honeycombio/beeline-python/trace.py
 """
 
 

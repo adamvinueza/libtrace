@@ -1,7 +1,8 @@
 from libevent.event import Event
 from typing import Dict
 """
-ADAPTED FROM Span CLASS AT https://github.com/honeycombio/beeline-python/trace.py
+ADAPTED FROM Span CLASS AT
+    https://github.com/honeycombio/beeline-python/trace.py
 """
 
 
