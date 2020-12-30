@@ -5,6 +5,9 @@ from typing import Dict
 class Span(object):
     """Represents an active span. Create via Tracer.start_span."""
     event: Event
+    id: str
+    parent_id: str
+    trace_id: str
     def __init__(self, trace_id: str, parent_id: str, id: str, ev: Event): ...
     def add_context(self, data: Dict) -> None: ...
     def add_context_field(self, key: str, value: str) -> None: ...
