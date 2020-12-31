@@ -1,10 +1,10 @@
 import datetime
 from typing import Dict, Optional
 from libtrace.generate import generate_trace_id, generate_span_id
+from libtrace.internal import log
 from libtrace.span import Span
 from libtrace.trace import Trace
 from libevent import Client
-from libtrace import log
 
 """
 ADAPTED FROM Tracer CLASS AT
