@@ -1,5 +1,4 @@
 import logging
-import sys
 
 _GLOBAL_LOGGER: logging.Logger
 _GLOBAL_DEBUG: bool = False
@@ -11,7 +10,7 @@ def init_logger(debug: bool = False) -> None:
 
     _GLOBAL_LOGGER = logging.Logger('libtrace')
     _GLOBAL_LOGGER.setLevel(logging.DEBUG)
-    sh = logging.StreamHandler(sys.stdout)
+    sh = logging.StreamHandler()
     sh.setLevel(logging.DEBUG)
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
