@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Optional
+from libtrace.internal import init_logger
 from libtrace.span import Span
 from libtrace.trace import Trace
 from libtrace.tracer import Tracer
-from libtrace.internal import _GLOBAL_DEBUG
 import libevent
 
 __all__ = ['Span', 'Trace']
@@ -17,8 +17,6 @@ def get_tracer(debug: bool = False) -> Tracer:
     if not _GLOBAL_TRACER:
         libevent.init()
         _GLOBAL_TRACER = Tracer(libevent.state.CLIENT)
-        internal.init_logger(debug)
+        init_logger(debug)
 
     return _GLOBAL_TRACER
-
-
