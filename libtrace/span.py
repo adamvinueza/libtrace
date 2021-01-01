@@ -1,3 +1,4 @@
+import datetime
 from libevent.event import Event
 from typing import Dict
 """
@@ -17,6 +18,11 @@ class Span(object):
         self.trace_id = trace_id
         self.parent_id = parent_id
         self.id = id
+        """
+        In beeline, start_time is a property of the event. But it's used only
+        for calculating an event field, so I think it belongs in the Span.
+        """
+        self.start_time = datetime.datetime.now()
 
     def add_context(self, data: Dict):
         self.event.add(data)
