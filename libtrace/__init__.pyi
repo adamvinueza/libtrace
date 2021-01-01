@@ -1,4 +1,6 @@
 from typing import Optional
+from .span import Span
+from .trace import Trace
 from .tracer import Tracer
 import logging
 
