@@ -1,6 +1,6 @@
 import unittest
 from libevent.event import Event
-from libtrace import Span
+from libtrace.span import Span
 
 
 class TestSpan(unittest.TestCase):

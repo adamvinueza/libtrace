@@ -6,7 +6,7 @@ from libtrace.trace import Trace
 from libtrace.tracer import Tracer
 import libevent
 
-__all__ = ['Span', 'Trace']
+__all__ = ['Span', 'Trace', 'Tracer']
 
 _GLOBAL_TRACER: Optional[Tracer] = None
 
