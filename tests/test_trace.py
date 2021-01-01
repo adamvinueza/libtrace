@@ -1,5 +1,5 @@
 import unittest
-from libtrace import Trace
+from libtrace.trace import Trace
 
 
 class TestTrace(unittest.TestCase):
