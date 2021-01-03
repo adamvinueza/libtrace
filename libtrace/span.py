@@ -13,11 +13,13 @@ class Span(object):
                  trace_id: str,
                  parent_id: str,
                  id: str,
-                 ev: Event):
+                 ev: Event,
+                 is_root: bool = False):
         self.event = ev
         self.trace_id = trace_id
         self.parent_id = parent_id
         self.id = id
+        self._is_root = is_root
         """
         In beeline, start_time is a property of the event. But it's used only
         for calculating an event field, so I think it belongs in the Span.
@@ -32,6 +34,10 @@ class Span(object):
 
     def fields(self):
         return self.event.fields()
+
+    @property
+    def is_root(self):
+        return self._is_root
 
     def remove_context_field(self, key):
         del(self.event[key])

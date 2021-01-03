@@ -4,6 +4,7 @@ from unittest.mock import Mock, call
 from libtrace.tracer import Tracer
 from typing import Any
 import libevent
+import libtrace
 
 """
 Based on classes in
@@ -12,6 +13,9 @@ Based on classes in
 
 
 class TestTracer(unittest.TestCase):
+    def setUp(self) -> None:
+        libtrace.init()
+
     def test_start_trace(self):
         mock_client = Mock(spec_set=libevent.Client)
         mock_client.new_event.return_value.start_time = datetime.datetime.now()

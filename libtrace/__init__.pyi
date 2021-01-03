@@ -1,14 +1,10 @@
-from typing import Optional
+from typing import Callable
 from .span import Span
 from .trace import Trace
+from .trace_container import TraceContainer
 from .tracer import Tracer
-import logging
 
 
-_GLOBAL_TRACER: Optional[Tracer] = None
-_GLOBAL_LOGGER: logging.Logger
-_GLOBAL_DEBUG: bool = False
-
-
-def get_tracer() -> Tracer: ...
-def log(msg: str, *args, **kwargs) -> None: ...
+def get_trace_container() -> TraceContainer: ...
+def init(debug: bool = False) -> None: ...
+def traced(name: str, trace_id: str = None, parent_id: str = None) -> Callable: ...

@@ -1,5 +1,6 @@
 import unittest
 from libevent.event import Event
+import libtrace
 from libtrace.span import Span
 
 

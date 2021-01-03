@@ -1,10 +1,13 @@
 import datetime
-from typing import Dict, Optional
-from libtrace.generate import generate_trace_id, generate_span_id
+import functools
+import traceback
+from typing import Callable, Dict, Optional
 from libtrace.internal import log
+from libtrace.generate import generate_trace_id, generate_span_id
 from libtrace.span import Span
 from libtrace.trace import Trace
 from libevent import Client
+from contextlib import contextmanager
 
 """
 ADAPTED FROM Tracer CLASS AT
@@ -19,6 +22,38 @@ class Tracer(object):
     def __init__(self, client: Client):
         self._client = client
         self._trace = None
+
+    @contextmanager
+    def __call__(self, name: str, trace_id: str = None, parent_id: str = None):
+        span = None
+        try:
+            # we've started a trace already
+            if self.get_active_trace_id() and trace_id is None:
+                span = self.start_span(context={'name': name},
+                                       parent_id=parent_id)
+            else:  # start a new trace
+                span = self.start_trace(
+                    context={'name': name},
+                    trace_id=trace_id,
+                    parent_id=parent_id
+                )
+            yield span
+        except Exception as e:
+            if span:
+                span.add_context({
+                    "app.exception_type": str(type(e)),
+                    "app.exception_string": str(e),
+                    "app.exception_stacktrace": traceback.format_exc(),
+                })
+            raise
+        finally:
+            if span:
+                if span.is_root:
+                    self.finish_trace(span)
+                else:
+                    self.finish_span(span)
+            else:
+                log(f"span for {name} was unexpectedly None")
 
     def finish_span(self, span) -> None:
         # no span, nothing to do
@@ -53,10 +88,21 @@ class Tracer(object):
         self.finish_span(span)
         self._trace = None
 
+    def get_active_trace_id(self) -> Optional[str]:
+        if self._trace:
+            return self._trace.id
+        return None
+
     def start_trace(self,
                     context: Optional[str] = None,
+                    trace_id: Optional[str] = None,
                     parent_span_id: Optional[str] = None) -> Span:
-        if not self._trace:
+        if trace_id:
+            if self._trace:
+                log("warning: trace id supplied to existing trace. "
+                    f"starting new trace with id = {trace_id}")
+            self._trace = Trace(trace_id)
+        else:
             self._trace = Trace(trace_id=generate_trace_id())
         return self.start_span(context=context, parent_id=parent_span_id)
 
@@ -64,6 +110,7 @@ class Tracer(object):
                    context: Optional[Dict] = None,
                    parent_id: Optional[str] = None) -> Optional[Span]:
         if not self._trace:
+            log('start_span called without an active trace')
             return None
         span_id = generate_span_id()
         evt = self._client.new_event(data=context)
@@ -79,9 +126,25 @@ class Tracer(object):
             'trace.parent_id': parent_span_id,
             'trace.span_id': span_id,
         })
+        is_root = len(self._trace.stack) == 0
         span = Span(trace_id=self._trace.id,
                     parent_id=parent_span_id,
                     id=span_id,
-                    ev=evt)
+                    ev=evt,
+                    is_root=is_root)
         self._trace.stack.append(span)
         return span
+
+
+def traced(tracer_fn: Callable,
+           name: str,
+           trace_id: Optional[str] = None,
+           parent_id: str = None) -> Callable:
+    def wrapped(fn):
+        @functools.wraps(fn)
+        def inner(*args, **kwargs):
+            with tracer_fn(name=name, trace_id=trace_id, parent_id=parent_id):
+                return fn(*args, **kwargs)
+
+        return inner
+    return wrapped
